@@ -53,7 +53,6 @@ public class usuariodaoImpl implements UsuarioDao{
             }
             throw new RuntimeException("Error al crear usuario"+e.getMessage());
         }
-
     }
 
     @Override
