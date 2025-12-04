@@ -2,15 +2,14 @@ package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import model.Libro;
 import model.Prestamo;
 
 import java.util.Optional;
 
-public class pretamodaoImpl implements PrestamoDao{
+public class prestamodaoImpl implements PrestamoDao{
     private EntityManager em;
 
-    public pretamodaoImpl(EntityManager em) {
+    public prestamodaoImpl(EntityManager em) {
         this.em = em;
     }
 

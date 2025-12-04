@@ -10,6 +10,9 @@ import java.util.Optional;
 public class ejemplardaoImpl implements EjemplarDao{
     private EntityManager em;
 
+    public ejemplardaoImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public boolean crearEjemplar(Ejemplar ejemplar) {

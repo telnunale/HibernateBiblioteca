@@ -3,6 +3,7 @@ package dao;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import model.Prestamo;
 import model.Usuario;
 
 import java.util.Optional;
@@ -75,4 +76,8 @@ public class usuariodaoImpl implements UsuarioDao{
             throw new RuntimeException("Error al borrar usuario"+e.getMessage());
         }
     }
+
+
+
+
 }

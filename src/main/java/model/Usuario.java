@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="usuario")
@@ -26,18 +28,64 @@ public class Usuario {
     @Column(name="fecha_registro")
     private LocalDateTime fecha_registro;
 
-    public Usuario(LocalDateTime fecha_registro, int id, LocalDate fecha_nacimiento, String email, String telefono, String nombre, String apellidos, String dni) {
+    @OneToMany(mappedBy = "usuario_id",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Prestamo> listaPrestamo;
+
+    //tabla intermedia
+
+    //Lado propiteatio porque tiene la join table
+    @ManyToMany
+    @JoinTable(
+            name = "favoritos",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "libro_id")
+    )
+    private List<Libro> librosFavoritos;
+
+    public Usuario(LocalDateTime fecha_registro, LocalDate fecha_nacimiento, String email, String telefono, String nombre, String apellidos, String dni) {
         this.fecha_registro = fecha_registro;
-        this.id = id;
         this.fecha_nacimiento = fecha_nacimiento;
         this.email = email;
         this.telefono = telefono;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.dni = dni;
+        this.librosFavoritos=new ArrayList<>();
     }
     public Usuario() {
 
+    }
+
+    public List<Libro> getLibrosFavoritos() {
+        return librosFavoritos;
+    }
+    public void anadirLibroFavorito(Libro l){
+        this.librosFavoritos.add(l);
+    }
+    public void borrarLibroFavorito(Libro l){
+        this.librosFavoritos.add(l);
+    }
+
+
+
+    public void setLibrosFavoritos(List<Libro> libros) {
+        this.librosFavoritos = libros;
+    }
+
+    public List<Prestamo> getListaPrestamo() {
+        return listaPrestamo;
+    }
+
+    public void setListaPrestamo(List<Prestamo> listaPrestamo) {
+        this.listaPrestamo = listaPrestamo;
+    }
+
+    public void anadirPrestamo(Prestamo p){
+        this.listaPrestamo.add(p);
+    }
+
+    public void borrarPrestamo(Prestamo p){
+        this.listaPrestamo.remove(p);
     }
 
     public int getId() {
@@ -104,6 +152,8 @@ public class Usuario {
         this.dni = dni;
     }
 
+
+
     @Override
     public String toString() {
         return "Usuario{" +
@@ -115,6 +165,7 @@ public class Usuario {
                 ", telefono='" + telefono + '\'' +
                 ", fecha_nacimiento=" + fecha_nacimiento +
                 ", fecha_registro=" + fecha_registro +
+                ",prestamo="+ this.listaPrestamo.size() +
                 '}';
     }
 }

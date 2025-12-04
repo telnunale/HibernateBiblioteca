@@ -76,6 +76,29 @@ CREATE TABLE prestamo (
     FOREIGN KEY (ejemplar_id) REFERENCES ejemplar(id)
 );
 
+
+-- Táboa de libro_categoria
+CREATE TABLE libro_categoria (
+       categoria_id INT NOT NULL,
+       libro_id INT NOT NULL,
+       puntuacion INT,
+
+       PRIMARY KEY (categoria_id, libro_id),
+       FOREIGN KEY (libro_id) REFERENCES libro(id),
+       FOREIGN KEY (categoria_id) REFERENCES categoria(id)
+);
+-- Táboa de exemplares
+CREATE TABLE libro_categoria (
+       usuario_id INT NOT NULL,
+       libro_id INT NOT NULL,
+
+
+       PRIMARY KEY (usuario_id, libro_id),
+       FOREIGN KEY (libro_id) REFERENCES libro(id),
+       FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+
 -- Inserción de datos
 
 -- Usuarios

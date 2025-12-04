@@ -2,8 +2,10 @@ package dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import model.Autor;
 
+import java.util.List;
 import java.util.Optional;
 
 public class autordaoImpl implements AutorDao {
@@ -17,13 +19,29 @@ public class autordaoImpl implements AutorDao {
     public boolean crearAutor(Autor autor) {
         EntityTransaction e = em.getTransaction();
         try {
+            TypedQuery<Autor> q = em.createQuery(
+                    "SELECT count(a) FROM Autor a WHERE a.nombre = :nombre",
+                    Autor.class
+            );
+            q.setParameter("nombre", autor.getNombre());
+
+
+            List<Autor> existe = q.getResultList();
+            if (existe.size() > 0) {
+                return false;
+            }
             e.begin();
             em.persist(autor);
             e.commit();
             return true;
+
+
         } catch (RuntimeException ex) {
-            e.rollback();
-            return false;
+            if (e.isActive()) {
+                e.rollback();
+                return false;
+            }
+            throw new RuntimeException(ex.getMessage());
         }
     }
 
@@ -52,15 +70,18 @@ public class autordaoImpl implements AutorDao {
         EntityTransaction tran = em.getTransaction();
         try {
             tran.begin();
-            Optional<Autor> a = this.buscarPorID(autor.getId());
-            if (a.isPresent()) {
-                em.remove(a.get().getId());
+            Autor a = em.find(Autor.class, autor.getId());
+            if (a != null) {
+                em.remove(autor);
                 tran.commit();
                 return true;
             }
             return false;
+
         } catch (RuntimeException e) {
-            tran.rollback();
+            if (tran.isActive()) {
+                tran.rollback();
+            }
             return false;
         }
     }

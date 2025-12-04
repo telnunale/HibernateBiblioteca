@@ -2,6 +2,8 @@ package model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="ejemplar")
 public class Ejemplar {
@@ -15,19 +17,41 @@ public class Ejemplar {
     @Enumerated(EnumType.STRING)
     @Column(name="estado")
     private EstadoENUM estado;
-    @Column(name="libro_id",nullable = false)
-    private int libro_id;
 
-    public Ejemplar(int id, String codigo, String ubicacion, EstadoENUM estado, int libro_id) {
-        this.id = id;
+
+    @OneToMany(mappedBy = "ejemplar_id",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Prestamo> listaPrestamo;
+
+    public Ejemplar(List<Prestamo> listaPrestamo) {
+        this.listaPrestamo = listaPrestamo;
+    }
+
+    public Ejemplar(String codigo, String ubicacion, EstadoENUM estado) {
+
         this.codigo = codigo;
         this.ubicacion = ubicacion;
         this.estado = estado;
-        this.libro_id = libro_id;
+
     }
 
-    public Ejemplar(EstadoENUM estado) {
-         this.estado= estado;
+    public List<Prestamo> getlistaPrestamo() {
+        return listaPrestamo;
+    }
+
+    public void setlistaPrestamo(List<Prestamo> listaPrestamo) {
+        this.listaPrestamo = listaPrestamo;
+    }
+
+
+    public void anadirPrestamo(Prestamo e){
+        this.listaPrestamo.add(e);
+    }
+
+    public void borrarPrestamo(Prestamo e){
+        this.listaPrestamo.remove(e);
+    }
+    public Ejemplar() {
+         this.estado= EstadoENUM.DISPONIBLE;
     }
 
     public int getId() {
@@ -62,13 +86,7 @@ public class Ejemplar {
         this.estado = estado;
     }
 
-    public int getLibro_id() {
-        return libro_id;
-    }
 
-    public void setLibro_id(int libro_id) {
-        this.libro_id = libro_id;
-    }
 
     @Override
     public String toString() {
@@ -77,7 +95,7 @@ public class Ejemplar {
                 ", codigo='" + codigo + '\'' +
                 ", ubicacion='" + ubicacion + '\'' +
                 ", estado=" + estado +
-                ", libro_id=" + libro_id +
+                ", cantida de prestamos=" + this.listaPrestamo.size() +
                 '}';
     }
 }

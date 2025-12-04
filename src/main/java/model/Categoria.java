@@ -2,6 +2,9 @@ package model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "categoria")
 public class Categoria {
@@ -13,8 +16,11 @@ public class Categoria {
     @Column(name = "descripcion",length = 255)
     private String descripcion;
 
-    public Categoria(int id, String nombre, String descripcion) {
-        this.id = id;
+    @OneToMany(mappedBy = "categoria_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<LibroCategoria> listaLibroCategoria = new ArrayList<>();
+
+    public Categoria( String nombre, String descripcion) {
+
         this.nombre = nombre;
         this.descripcion = descripcion;
     }

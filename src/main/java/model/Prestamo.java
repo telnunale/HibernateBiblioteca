@@ -12,27 +12,38 @@ public class Prestamo {
     private int id;
     @Column(name = "fecha_inicio")
     private LocalDate fecha_inicio;
-    @Column(name="fecha_devolucion")
+    @Column(name = "fecha_devolucion")
     private LocalDate fecha_devolucion;
     @Enumerated(EnumType.STRING)
-    @Column(name="estado")
+    @Column(name = "estado")
     private EstadoPrestamoEnum estado;
-    @Column(name = "ejemplar_id",nullable = false)
-    private int ejemplar_id;
-    @Column(name = "usuario_id",nullable = false)
-    private int usuario_id;
 
-    public Prestamo(int id, LocalDate fecha_inicio, LocalDate fecha_devolucion, EstadoPrestamoEnum estado, int ejemplar_id, int usuario_id) {
-        this.id = id;
+    @Column(name = "fecha_fin")
+    private LocalDate fecha_fin;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ejemplar_id", nullable = false)
+    private Ejemplar ejemplar_id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario_id;
+
+
+    public Prestamo(LocalDate fecha_inicio, LocalDate fecha_devolucion, EstadoPrestamoEnum estado, Ejemplar ejemplar_id, Usuario usuario_id) {
         this.fecha_inicio = fecha_inicio;
         this.fecha_devolucion = fecha_devolucion;
         this.estado = estado;
         this.ejemplar_id = ejemplar_id;
         this.usuario_id = usuario_id;
+        this.fecha_fin= this.fecha_inicio.plusDays(7);
     }
 
     public Prestamo(EstadoPrestamoEnum estado) {
-        this.estado=estado;
+        this.estado = estado;
+    }
+
+    public Prestamo() {
     }
 
     public int getId() {
@@ -67,19 +78,31 @@ public class Prestamo {
         this.estado = estado;
     }
 
-    public int getEjemplar_id() {
+    public Ejemplar getEjemplar_id() {
         return ejemplar_id;
     }
 
-    public void setEjemplar_id(int ejemplar_id) {
+    public void setEjemplar_id(Ejemplar ejemplar_id) {
         this.ejemplar_id = ejemplar_id;
     }
 
-    public int getUsuario_id() {
+    public Usuario getUsuario_id() {
         return usuario_id;
     }
 
-    public void setUsuario_id(int usuario_id) {
+    public void setUsuario_id(Usuario usuario_id) {
         this.usuario_id = usuario_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Prestamo{" +
+                "id=" + id +
+                ", fecha_inicio=" + fecha_inicio +
+                ", fecha_devolucion=" + fecha_devolucion +
+                ", estado=" + estado +
+                ", ejemplar_id=" + this.ejemplar_id +
+                ", usuario_id=" + this.usuario_id +
+                '}';
     }
 }
