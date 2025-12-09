@@ -54,11 +54,11 @@ public class Prestamo {
         this.id = id;
     }
 
-    public LocalDate getFecha_inicio() {
+    public LocalDate getfecha_inicio() {
         return fecha_inicio;
     }
 
-    public void setFecha_inicio(LocalDate fecha_inicio) {
+    public void setfecha_inicio(LocalDate fecha_inicio) {
         this.fecha_inicio = fecha_inicio;
     }
 

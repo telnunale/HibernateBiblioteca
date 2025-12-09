@@ -3,9 +3,12 @@ package dao;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 import model.Prestamo;
 import model.Usuario;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 public class usuariodaoImpl implements UsuarioDao{
@@ -77,7 +80,19 @@ public class usuariodaoImpl implements UsuarioDao{
         }
     }
 
+    public Optional<Usuario> findByDni(String dni){
+        String jpql="Select u FROM Usuario u where u.dni = :dni";
+        TypedQuery<Usuario> query = entityManager.createQuery(jpql,Usuario.class);
+        query.setParameter("dni",dni);
+        Usuario user= query.getSingleResult();
+        return Optional.of(user);
+    }
 
+    public List<Object[]> usuariosFavoritos(){
+        String jpql="Select u,count(f) FROM Usuario u " +
+                "       Left JOIN u.librosFavoritos f Group BY u";
+        TypedQuery<Object[]> query=entityManager.createQuery(jpql,Object[].class);
 
-
+        return query.getResultList();
+    }
 }

@@ -1,3 +1,4 @@
+import criteria.PrestamoCriteria;
 import dao.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -8,6 +9,7 @@ import org.hibernate.persister.entity.EntityPersister;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public class App {
@@ -18,7 +20,9 @@ public class App {
         try (EntityManager em = Persistence.
                 createEntityManagerFactory("biblioteca").createEntityManager()) {
 
+            PrestamoDao prestamoDAO= new prestamodaoImpl(em);
           UsuarioDao usuarioDao = new usuariodaoImpl(em);
+            AutorDao ad = new autordaoImpl(em);
            /* Optional<Usuario> u = usuarioDao.buscarPorID(1);
             if (u.isPresent()) {
                 System.out.println("usuario encontrado " + u.get());
@@ -44,8 +48,8 @@ public class App {
             if (koautor.isPresent()) {
                 boolean ko = ad.eliminarAutor(koautor.get());
                 System.out.println("Autor eliminado:" + ko);
-            }*/
-            PrestamoDao prestamoDAO= new prestamodaoImpl(em);
+            }
+
             Optional<Prestamo> prestamo = prestamoDAO.buscarPorID(2);
             /*if (prestamo.isPresent()){
                 System.out.println("Antes de acceder al usuario:");
@@ -66,12 +70,12 @@ public class App {
             } else {
                 System.out.println("Prestamo no encontrado");
             }
-            AutorDao ad = new autordaoImpl(em);
+
             Optional<Autor> a = ad.buscarPorID(3);
             if(a.isPresent()){
                 System.out.println(a.get());
             }
-            Optional<Prestamo> prestamoID2 = prestamoDAO.buscarPorID(2);*/
+            Optional<Prestamo> prestamoID2 = prestamoDAO.buscarPorID(2);
             EjemplarDao ejemplarDao = new ejemplardaoImpl(em);
             Optional<Usuario> u = usuarioDao.buscarPorID(2);
             if (u.isPresent()){
@@ -96,10 +100,36 @@ public class App {
                 if(libro.isPresent()){
                     u.get().anadirLibroFavorito(libro.get());
                     usuarioDao.actulizarUsuario(u.get());
-                }*/
+                }
 
 
+            }*/
+            /*List<Prestamo> listaPrestamos= prestamoDAO.recuperarTodos();
+            for (Prestamo p : listaPrestamos) {
+                System.out.println(p);
             }
+            Optional<Usuario> usr= usuarioDao.findByDni("12345678A");
+            if(usr.isPresent()) System.out.println(usr);*/
+            /*List<Prestamo> listaPrestamos= prestamoDAO.getPrestamoEstado(EstadoPrestamoEnum.ACTIVO);
+            for (Prestamo p : listaPrestamos) {
+                System.out.println(p);
+            }*/
+            List<Object[]> listObj = usuarioDao.usuariosFavoritos();
+            for (Object[] ob : listObj) {
+                Usuario u= (Usuario) ob[0];
+                long total=(long) ob[1];
+                System.out.println("Usuario"+ u.getId() + " nombre "+ u.getNombre());
+            }
+
+            /*PrestamoCriteria pc= new PrestamoCriteria();
+            pc.setEstado(EstadoPrestamoEnum.ACTIVO);
+            pc.setFechaInicio(LocalDate.of(2024,1,1));
+            pc.setFinFechaInicio(LocalDate.of(2024,2,10));
+            List<Prestamo> prestamoList= prestamoDAO.getPrestamoCriteria(pc);
+            for (Prestamo prestamo : prestamoList) {
+                System.out.println(prestamo);
+            }*/
+
 
 
 
