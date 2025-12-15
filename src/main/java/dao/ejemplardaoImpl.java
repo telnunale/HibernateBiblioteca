@@ -53,9 +53,10 @@ public class ejemplardaoImpl implements EjemplarDao{
         EntityTransaction et= em.getTransaction();
         try{
             et.begin();
-            Optional<Ejemplar> e = this.buscarPorID(ejemplar.getId());
-            if(e.isPresent()){
-                em.remove(e.get().getId());
+
+            Ejemplar e = em.find(Ejemplar.class, ejemplar.getId());
+            if(e!=null){
+                em.remove(e);
                 et.commit();
                 return true;
             }
